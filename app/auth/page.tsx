@@ -79,97 +79,113 @@ const AuthPage = () => {
 
   if (isLoading || authToken) {
     return (
-      <div className="container d-flex justify-content-center align-items-center vh-100">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="container d-flex justify-content-center align-items-center vh-100">
-      <div className="card p-4" style={{ width: "400px" }}>
-        <h3 className="text-center mb-4">{isLogin ? "Login" : "Register"}</h3>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
+        <div>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            {isLogin ? "Sign in to your account" : "Create your account"}
+          </h2>
+        </div>
         
-        <form onSubmit={handleSubmit}>
-          {!isLogin && (
-            <div className="mb-3">
-              <input
-                className="form-control"
-                name="name"
-                type="text"
-                value={formData.name}
-                onChange={handleInputChange}
-                placeholder="Name"
-                required
-              />
-            </div>
-          )}
-
-          <div className="mb-3">
-            <input
-              className="form-control"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder="Email"
-              required
-            />
-          </div>
-
-          <div className="mb-3">
-            <input
-              className="form-control"
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              placeholder="Password"
-              minLength={8}
-              required
-            />
-          </div>
-
-          {!isLogin && (
-            <div className="mb-3">
-              <input
-                className="form-control"
-                name="password_confirmation"
-                type="password"
-                value={formData.password_confirmation}
-                onChange={handleInputChange}
-                placeholder="Confirm Password"
-                minLength={8}
-                required
-              />
-            </div>
-          )}
-
-          <button 
-            className="btn btn-primary w-100" 
-            type="submit"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? (
-              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            ) : (
-              isLogin ? "Login" : "Register"
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div className="rounded-md shadow-sm space-y-4">
+            {!isLogin && (
+              <div>
+                <label htmlFor="name" className="sr-only">Name</label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  required
+                  className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                  placeholder="Name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                />
+              </div>
             )}
-          </button>
+
+            <div>
+              <label htmlFor="email" className="sr-only">Email address</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                placeholder="Email address"
+                value={formData.email}
+                onChange={handleInputChange}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className="sr-only">Password</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                minLength={8}
+                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleInputChange}
+              />
+            </div>
+
+            {!isLogin && (
+              <div>
+                <label htmlFor="password_confirmation" className="sr-only">Confirm Password</label>
+                <input
+                  id="password_confirmation"
+                  name="password_confirmation"
+                  type="password"
+                  required
+                  minLength={8}
+                  className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                  placeholder="Confirm Password"
+                  value={formData.password_confirmation}
+                  onChange={handleInputChange}
+                />
+              </div>
+            )}
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+            >
+              {isSubmitting ? (
+                <div className="w-5 h-5 border-t-2 border-b-2 border-white rounded-full animate-spin"></div>
+              ) : (
+                isLogin ? "Sign in" : "Sign up"
+              )}
+            </button>
+          </div>
         </form>
 
-        <p className="mt-3 text-center">
-          {isLogin ? "Don't have an account?" : "Already have an account?"}
-          <button 
-            onClick={() => setIsLogin(!isLogin)} 
-            className="btn btn-link p-0 ms-1"
-            disabled={isSubmitting}
-          >
-            {isLogin ? "Register" : "Login"}
-          </button>
-        </p>
+        <div className="text-center">
+          <p className="text-sm text-gray-600">
+            {isLogin ? "Don't have an account?" : "Already have an account?"}
+            <button
+              onClick={() => setIsLogin(!isLogin)}
+              disabled={isSubmitting}
+              className="ml-1 font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:underline transition-colors duration-200"
+            >
+              {isLogin ? "Sign up" : "Sign in"}
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   );
