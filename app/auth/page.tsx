@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useEffect, useState } from 'react';
 import { useAppContext } from '@/context/AppProvider';
@@ -21,15 +21,23 @@ const AuthPage = () => {
     password_confirmation: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [hasRedirected, setHasRedirected] = useState(false); // Prevent double redirect
   const router = useRouter();
-  const { login, register, authToken, isLoading } = useAppContext();
+  const { login, register, authToken, isLoading, user } = useAppContext();
 
+  // Redirect if already authenticated
   useEffect(() => {
-    if (authToken && !isLoading) {
-      router.push("/dashboard");
+    if (!hasRedirected && authToken && !isLoading && user?.role) {
+      if (user.role === 'admin') {
+        router.push('/dashboard'); // Admin
+      } else {
+        router.push('/user'); // Regular user
+      }
+      setHasRedirected(true);
     }
-  }, [authToken, isLoading, router]);
+  }, [authToken, isLoading, user?.role, hasRedirected, router]);
 
+  // Handle input change
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -37,6 +45,7 @@ const AuthPage = () => {
     });
   };
 
+  // Submit login or register
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsSubmitting(true);
@@ -48,6 +57,7 @@ const AuthPage = () => {
       } else {
         if (formData.password !== formData.password_confirmation) {
           toast.error("Passwords don't match!");
+          setIsSubmitting(false);
           return;
         }
         await register(
@@ -57,11 +67,11 @@ const AuthPage = () => {
           formData.password_confirmation!
         );
         toast.success("Registered successfully! Please login.");
-        setIsLogin(true); // Switch to login after registration
+        setIsLogin(true); // Switch to login form
       }
     } catch (error: any) {
       console.error("Authentication error:", error);
-      toast.error(error.response?.data?.message || "Authentication failed");
+      toast.error(error?.response?.data?.message || "Authentication failed");
     } finally {
       setIsSubmitting(false);
     }
