@@ -34,7 +34,7 @@ const Navbar = () => {
       <nav className="bg-primary-600 text-white shadow-md">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            <span className="text-lg font-semibold">Library System</span>
+           
             <div className="animate-pulse h-4 w-24 bg-primary-500 rounded"></div>
           </div>
         </div>

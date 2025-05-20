@@ -192,9 +192,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setAuthToken(null);
       setUser(null);
       
-      toast.success('Logged out successfully');
+      // Set loading to false before redirect
       setIsLoading(false);
-      router.push('/auth');
+      
+      // Show success message
+      toast.success('Logged out successfully');
+      
+      // Clear any pending requests
+      axios.defaults.headers.common['Authorization'] = '';
+      
+      // Use setTimeout to ensure state updates are processed before redirect
+      setTimeout(() => {
+        // Force a hard redirect to auth page
+        window.location.href = '/auth';
+      }, 100);
     } catch (error) {
       console.error('Logout error:', error);
       // Even if there's an error, ensure we clear local state
@@ -202,9 +213,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       localStorage.removeItem('user');
       setAuthToken(null);
       setUser(null);
-      toast.success('Logged out successfully');
+      
+      // Clear any pending requests
+      axios.defaults.headers.common['Authorization'] = '';
+      
+      // Set loading to false before redirect
       setIsLoading(false);
-      router.push('/auth');
+      
+      // Show success message
+      toast.success('Logged out successfully');
+      
+      // Use setTimeout to ensure state updates are processed before redirect
+      setTimeout(() => {
+        // Force a hard redirect to auth page
+        window.location.href = '/auth';
+      }, 100);
     }
   };
 
